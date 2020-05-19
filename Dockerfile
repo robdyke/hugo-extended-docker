@@ -1,7 +1,6 @@
 FROM ubuntu:latest
 
-RUN apt-get update && apt-get -y upgrade
-RUN apt-get install -y curl unzip wget git build-essential
+RUN apt-get update && apt-get -y upgrade && apt-get install -y curl unzip wget git build-essential
 
 # install Go
 ENV GOLANG_VERSION 1.14
