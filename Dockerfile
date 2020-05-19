@@ -27,5 +27,6 @@ RUN curl -Lf -o hugo.zip https://github.com/gohugoio/hugo/archive/v${HUGO_VERSIO
   cd .. && rm -fr hugo* && \
   hugo version
 
+WORKDIR /WORKDIR
 CMD [ "hugo" ]
 EXPOSE 1313
