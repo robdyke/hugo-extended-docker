@@ -1,0 +1,25 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches:
+    - none
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build the Docker image
+      env:
+        REGISTRY_PASSWORD: ${{ secrets.DOCKER_PW }}
+        REGISTRY_USER: ${{ secrets.DOCKER_USER }}
+      run: |
+        export HUGO_VERSION=$(cat HUGO_VERSION)
+        docker build . --file Dockerfile -t hugo-extended:$HUGO_VERSION --build-arg HUGO_VERSION=$HUGO_VERSION
+        docker build . --file Dockerfile -t hugo-extended:latest --build-arg HUGO_VERSION=$HUGO_VERSION
+        docker tag hugo-extended:latest robdykedotcom/hugo-extended:latest
+        docker tag hugo-extended:$HUGO_VERSION robdykedotcom/hugo-extended:$HUGO_VERSION
+        echo "$REGISTRY_PASSWORD" | docker login -u "$REGISTRY_USER" --password-stdin
+        docker push robdykedotcom/hugo-extended:$HUGO_VERSION
+        docker push robdykedotcom/hugo-extended:latest
